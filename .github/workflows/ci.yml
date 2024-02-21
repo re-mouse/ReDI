@@ -22,7 +22,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore     
     - name: Test
-      run: dotnet test ReDI.Tests --no-build --verbosity normal
+      run: dotnet test ReDI.Tests --verbosity normal
     
     - name: Build
       run: dotnet build -c Release --no-restore
