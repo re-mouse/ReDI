@@ -8,9 +8,11 @@ It works well with unity, as it targets at .net standard 2.1.
 
 ## Quickstart
 ### Install
-Install ReDI via NuGet:
+#### Install ReDI via NuGet:
 Add the ReDI package to your project using NuGet:
+```
 Install-Package ReDI
+```
 
 ### Create Modules:
 Define your modules by creating classes that inherit from Module. A common naming convention is {LibraryName}Module. 
