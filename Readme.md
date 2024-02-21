@@ -1,4 +1,4 @@
-# ReDI: Reusable Dependency Injection (ReDI) Framework
+# ReDI: Reusable Dependency Injection
 ## Purpose
 1. The ReDI framework aims to simplify dependency management within your projects. By encapsulating dependencies in modules, it allows you to create reusable libraries and easily set up test environments. With just a few lines of code, you can manage complex dependency graphs.
 2. As it target at .NETStandard 2.1, it can be used in Unity and .NET solutions. You can create architecture with shared libraries and use same dependencies beetwen them
