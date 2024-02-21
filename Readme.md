@@ -1,16 +1,22 @@
-ReDI: Reusable Dependency Injection (ReDI) Framework
-Purpose
-The ReDI framework aims to simplify dependency management within your projects. By encapsulating dependencies in modules, it allows you to create reusable libraries and easily set up test environments. With just a few lines of code, you can manage complex dependency graphs.
+# ReDI: Reusable Dependency Injection (ReDI) Framework
+## Purpose
+1. The ReDI framework aims to simplify dependency management within your projects. By encapsulating dependencies in modules, it allows you to create reusable libraries and easily set up test environments. With just a few lines of code, you can manage complex dependency graphs.
+2. As it target at .NETStandard 2.1, it can be used in Unity and .NET solutions. You can create architecture with shared libraries and use same dependencies beetwen them
 
-Quickstart
+## Compatability
+It works well with unity, as it targets at .net standard 2.1.
+
+## Quickstart
+### Install
 Install ReDI via NuGet:
-Add the StackExchange.Redis package to your project using NuGet:
-Install-Package StackExchange.Redis
+Add the ReDI package to your project using NuGet:
+Install-Package ReDI
 
-Create Modules:
-Define your modules by creating classes that inherit from Module. A common naming convention is {LibraryName}Module.
+### Create Modules:
+Define your modules by creating classes that inherit from Module. A common naming convention is {LibraryName}Module. 
 In each module, specify the types and their dependencies using the same syntax as Microsoft’s Dependency Injection (DI) framework.
-Example Usage
+
+## Example Usage
 Suppose we have the following scenario:
 
 Modules:
