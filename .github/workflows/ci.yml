@@ -23,7 +23,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build -c Release --no-restore
 
     - name: Test
       run: dotnet test ReDI.Tests --no-build --verbosity normal
@@ -31,5 +31,5 @@ jobs:
     - name: Publish NuGet
       run: |
         dotnet pack --no-build -o nupkg
-        dotnet nuget push <YourNuGetPackageName>/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+        dotnet nuget push ReDI/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
 

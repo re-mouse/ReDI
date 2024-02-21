@@ -70,9 +70,6 @@ namespace ReDI
                 multiDelegate += (obj, container) =>
                 {
                     var injectingValue = container.Resolve(field.FieldType);
-#if !DEBUG
-                    if (property.CanWrite)
-#endif
                     field.SetValue(obj, injectingValue);
                 };
             }
