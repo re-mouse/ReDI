@@ -6,7 +6,7 @@
 Codebase contain only ~500 lines, so i will try not to increase it, and my goal is to keep that minimal API, but maybe add some binding features, like factories
 
 ## Compatability
-It works well almost with unity, as it targets at .net standard 2.1, also it compatible with AOT .NET applications
+It works well with unity, as it targets at .net standard 2.1, and with any .net application above .net 5
 
 ## Quickstart
 ### Install
