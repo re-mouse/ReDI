@@ -9,11 +9,10 @@ namespace ReDI
         
         public BindingConfigurator<I> AddSingleton<I, T>() where T : class, I
         {
-            var binding = new BindingInfo
+            var binding = new BindingInfo(typeof(T))
             {
-                boundType = typeof(T),
-                associatedInterfaces = { typeof(I) },
-                alwaysNewInstance = false
+                AssociatedInterfaces = { typeof(I) },
+                AlwaysNewInstance = false
             };
             
             _bindings.Add(binding);
@@ -23,11 +22,10 @@ namespace ReDI
         
         public BindingConfigurator<I> AddTransient<I, T>() where T : class, I
         {
-            var binding = new BindingInfo
+            var binding = new BindingInfo(typeof(T))
             {
-                boundType = typeof(T),
-                associatedInterfaces = { typeof(I) },
-                alwaysNewInstance = true
+                AssociatedInterfaces = { typeof(I) },
+                AlwaysNewInstance = true
             };
             
             _bindings.Add(binding);
@@ -37,11 +35,10 @@ namespace ReDI
         
         public BindingConfigurator<T> AddSingleton<T>() where T : class
         {
-            var binding = new BindingInfo
+            var binding = new BindingInfo(typeof(T))
             {
-                boundType = typeof(T),
-                associatedInterfaces = { typeof(T) },
-                alwaysNewInstance = false
+                AssociatedInterfaces = { typeof(T) },
+                AlwaysNewInstance = false
             };
             
             _bindings.Add(binding);
@@ -51,11 +48,10 @@ namespace ReDI
         
         public BindingConfigurator<T> AddTransient<T>() where T : class
         {
-            var binding = new BindingInfo
+            var binding = new BindingInfo(typeof(T))
             {
-                boundType = typeof(T),
-                associatedInterfaces = { typeof(T) },
-                alwaysNewInstance = true
+                AssociatedInterfaces = { typeof(T) },
+                AlwaysNewInstance = true
             };
             
             _bindings.Add(binding);

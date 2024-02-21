@@ -20,9 +20,9 @@ namespace ReDI
             
             foreach (var binding in bindings)
             {
-                var registration = new ServiceRegistration(binding.boundType, binding.alwaysNewInstance, binding.isDisposable, binding.instance);
+                var registration = new ServiceRegistration(binding.BoundType, binding.AlwaysNewInstance, binding.IsDisposable, binding.Instance);
                 
-                foreach (var interfaceType in binding.associatedInterfaces)
+                foreach (var interfaceType in binding.AssociatedInterfaces)
                 {
                     if (!_registrationsByInterface.TryGetValue(interfaceType, out var existingRegistrations))
                     {
@@ -33,7 +33,7 @@ namespace ReDI
                     existingRegistrations.Add(registration);
                 }
 
-                if (binding.createOnBuild)
+                if (binding.CreateOnBuild)
                     toBuild.Add(registration);
                 
                 _registrations.Add(registration);
@@ -74,39 +74,57 @@ namespace ReDI
         {
             CheckIfDisposed();
 
-            bool isList = IsGenericList(type);
-            var serviceType = isList ? GetListTypeArgument(type) : type;
-            
-            if (!_registrationsByInterface.TryGetValue(serviceType, out var registrations))
-                return null;
-            
             if (IsGenericList(type))
             {
-                var listType = typeof(List<>);
-                var constructedListType = listType.MakeGenericType(serviceType);
-
-                var instance = Activator.CreateInstance(constructedListType, registrations.Count) as IList;
-                foreach (var registration in registrations)
-                    instance.Add(Build(registration));
-                
-                return instance;
+                return ResolveList(type);
             }
             else
             {
-                return Build(registrations.First());
+                return ResolveSingle(type);
             }
         }
-        
+
+        private object? ResolveSingle(Type type)
+        {
+            if (!_registrationsByInterface.TryGetValue(type, out var registrations))
+            {
+                return null;
+            }
+
+            return Build(registrations.First());
+        }
+
+        private object? ResolveList(Type type)
+        {
+            var serviceType = GetListTypeArgument(type);
+
+            if (!_registrationsByInterface.TryGetValue(serviceType, out var registrations))
+            {
+                return null;
+            }
+
+            var listType = typeof(List<>);
+            var constructedListType = listType.MakeGenericType(serviceType);
+
+            var instance = Activator.CreateInstance(constructedListType, registrations.Count) as IList;
+            foreach (var registration in registrations)
+            {
+                instance.Add(Build(registration));
+            }
+
+            return instance;
+        }
+
         private bool IsGenericList(Type type)
         {
             return type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>));
         }
-        
+
         private Type GetListTypeArgument(Type type)
         {
             return type.GetGenericArguments()[0];
         }
-        
+
         private void CheckIfDisposed()
         {
 #if DEBUG
@@ -117,24 +135,10 @@ namespace ReDI
 
         private object Build(ServiceRegistration registration)
         {
-            if (registration.AlwaysNewInstance)
+            if (registration.AlwaysNewInstance || registration.Instance == null)
             {
-                if (!_constructingTypes.Add(registration.ServiceType))
-                    throw new CircularDependencyFoundException(registration.ServiceType);
-                
-                var obj = registration.Create(this);
-                _constructingTypes.Remove(registration.ServiceType);
-                
-                registration.Inject(obj, this);
-                return obj;
-            }
-            else if (registration.Instance == null)
-            {
-                if (!_constructingTypes.Add(registration.ServiceType))
-                    throw new CircularDependencyFoundException(registration.ServiceType);
-                
+                CheckForCircularDependency(registration);
                 registration.Instance = registration.Create(this);
-                
                 _constructingTypes.Remove(registration.ServiceType);
             }
 
@@ -144,6 +148,14 @@ namespace ReDI
             }
 
             return registration.Instance;
+        }
+
+        private void CheckForCircularDependency(ServiceRegistration registration)
+        {
+            if (!_constructingTypes.Add(registration.ServiceType))
+            {
+                throw new CircularDependencyFoundException(registration.ServiceType);
+            }
         }
     }
 }

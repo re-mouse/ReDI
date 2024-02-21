@@ -1,40 +1,43 @@
-namespace ReDI.Tests;
+using System.Collections.Generic;
 
-public class ListDependencyService : IValidateInjected
+namespace ReDI.Tests
 {
-    [Inject] public List<ITwoServicesDependency> dependencies { get; set; }
+    public class ListDependencyService : IValidateInjected
+    {
+        [Inject] public List<ITwoServicesDependency> dependencies { get; set; }
 
-    public bool Validate()
+        public bool Validate()
     {
         return dependencies.Count == 2;
     }
-}
+    }
 
-public class TwoServicesDependencyModule : Module
-{
-    public override void BindDependencies(TypeManager typeBinder)
+    public class TwoServicesDependencyModule : Module
+    {
+        public override void BindDependencies(TypeManager typeBinder)
     {
         typeBinder.AddSingleton<ITwoServicesDependency, ServiceAa>();
         typeBinder.AddSingleton<ITwoServicesDependency, ServiceBb>();
         typeBinder.AddSingleton<ListDependencyService>();
     }
 
-    public override void BindModuleDependencies(ModuleManager moduleBinder)
+        public override void BindModuleDependencies(ModuleManager moduleBinder)
     {
         
     }
-}
+    }
 
-public class ServiceAa : ITwoServicesDependency
-{
+    public class ServiceAa : ITwoServicesDependency
+    {
     
-}
+    }
 
-public class ServiceBb : ITwoServicesDependency
-{
+    public class ServiceBb : ITwoServicesDependency
+    {
     
-}
+    }
 
-public interface ITwoServicesDependency
-{
+    public interface ITwoServicesDependency
+    {
+    }
 }

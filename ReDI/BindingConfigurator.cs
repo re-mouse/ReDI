@@ -5,12 +5,17 @@ namespace ReDI
 {
     internal class BindingInfo
     {
-        public bool alwaysNewInstance;
-        public readonly HashSet<Type> associatedInterfaces = new HashSet<Type>();
-        public Type boundType;
-        public object instance;
-        public bool createOnBuild;
-        public bool isDisposable;
+        public bool AlwaysNewInstance { get; set; }
+        public HashSet<Type> AssociatedInterfaces { get; } = new HashSet<Type>();
+        public Type BoundType { get; }
+        public object? Instance { get; set; }
+        public bool CreateOnBuild { get; set; }
+        public bool IsDisposable { get; set; }
+
+        public BindingInfo(Type boundType)
+        {
+            BoundType = boundType; 
+        }
     }
     
     public class BindingConfigurator<T>
@@ -24,32 +29,31 @@ namespace ReDI
 
         public BindingConfigurator<T> ImplementingInterfaces()
         {
-            _binding.associatedInterfaces.UnionWith(_binding.boundType.GetInterfaces());
+            _binding.AssociatedInterfaces.UnionWith(_binding.BoundType.GetInterfaces());
             return this;
         }
         
         public BindingConfigurator<T> AsDisposable()
         {
-            
-            _binding.isDisposable = true;
+            _binding.IsDisposable = true;
             return this;
         }
 
         public BindingConfigurator<T> As<TInterface>()
         {
-            _binding.associatedInterfaces.Add(typeof(TInterface));
+            _binding.AssociatedInterfaces.Add(typeof(TInterface));
             return this;
         }
 
         public BindingConfigurator<T> FromInstance(T instance)
         {
-            _binding.instance = instance;
+            _binding.Instance = instance;
             return this;
         }
 
         public BindingConfigurator<T> CreateOnContainerBuild()
         {
-            _binding.createOnBuild = true;
+            _binding.CreateOnBuild = true;
             return this;
         }
     }

@@ -1,3 +1,5 @@
+using System;
+
 namespace ReDI.Tests
 {
     public class Service : IService, IDisposable

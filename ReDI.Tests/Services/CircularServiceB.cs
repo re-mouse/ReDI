@@ -1,9 +1,10 @@
-namespace ReDI.Tests;
-
-public class CircularServiceB
+namespace ReDI.Tests
 {
-    public CircularServiceB(CircularServiceA serviceA)
+    public class CircularServiceB
     {
+        public CircularServiceB(CircularServiceA serviceA)
+        {
         
+        }
     }
 }
