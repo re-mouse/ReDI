@@ -20,7 +20,7 @@ namespace ReDI
             
             foreach (var binding in bindings)
             {
-                var registration = new ServiceRegistration(binding.BoundType, binding.AlwaysNewInstance, binding.IsDisposable, binding.Instance);
+                var registration = new ServiceRegistration(binding.InstanceType, binding.AlwaysNewInstance, binding.IsDisposable, binding.Instance);
                 
                 foreach (var interfaceType in binding.AssociatedInterfaces)
                 {
@@ -78,10 +78,30 @@ namespace ReDI
             {
                 return ResolveList(type);
             }
+            else if (IsGeneric(type))
+            {
+                return ResolveGeneric(type);
+            }
             else
             {
                 return ResolveSingle(type);
             }
+        }
+        
+        private bool IsGeneric(Type type)
+        {
+            return type.IsGenericType;
+        }
+
+        private object? ResolveGeneric(Type type)
+        {
+            var definition = type.GetGenericTypeDefinition();
+            if (!_registrationsByInterface.TryGetValue(definition, out var registrations))
+            {
+                return null;
+            }
+
+            return Build(registrations.First(), type);
         }
 
         private object? ResolveSingle(Type type)
@@ -133,18 +153,18 @@ namespace ReDI
 #endif
         }
 
-        private object Build(ServiceRegistration registration)
+        private object Build(ServiceRegistration registration, Type concreteType = null)
         {
             if (registration.AlwaysNewInstance || registration.Instance == null)
             {
                 CheckForCircularDependency(registration);
-                registration.Instance = registration.Create(this);
+                registration.Instance = registration.Create(this, concreteType);
                 _constructingTypes.Remove(registration.ServiceType);
             }
 
             if (!registration.IsInjected)
             {
-                registration.Inject(registration.Instance, this);
+                registration.Inject(registration.Instance, this, concreteType);
             }
 
             return registration.Instance;

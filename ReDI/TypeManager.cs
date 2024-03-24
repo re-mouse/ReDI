@@ -7,7 +7,7 @@ namespace ReDI
     {
         private readonly List<BindingInfo> _bindings = new List<BindingInfo>();
         
-        public BindingConfigurator<I> AddSingleton<I, T>() where T : class, I
+        public BindingConfigurator AddSingleton<I, T>() where T : class, I
         {
             var binding = new BindingInfo(typeof(T))
             {
@@ -17,10 +17,10 @@ namespace ReDI
             
             _bindings.Add(binding);
             
-            return new BindingConfigurator<I>(binding);
+            return new BindingConfigurator(binding);
         }
         
-        public BindingConfigurator<I> AddTransient<I, T>() where T : class, I
+        public BindingConfigurator AddTransient<I, T>() where T : class, I
         {
             var binding = new BindingInfo(typeof(T))
             {
@@ -30,10 +30,10 @@ namespace ReDI
             
             _bindings.Add(binding);
             
-            return new BindingConfigurator<I>(binding);
+            return new BindingConfigurator(binding);
         }
         
-        public BindingConfigurator<T> AddSingleton<T>() where T : class
+        public BindingConfigurator AddSingleton<T>() where T : class
         {
             var binding = new BindingInfo(typeof(T))
             {
@@ -43,10 +43,10 @@ namespace ReDI
             
             _bindings.Add(binding);
             
-            return new BindingConfigurator<T>(binding);
+            return new BindingConfigurator(binding);
         }
         
-        public BindingConfigurator<T> AddTransient<T>() where T : class
+        public BindingConfigurator AddTransient<T>() where T : class
         {
             var binding = new BindingInfo(typeof(T))
             {
@@ -56,7 +56,59 @@ namespace ReDI
             
             _bindings.Add(binding);
             
-            return new BindingConfigurator<T>(binding);
+            return new BindingConfigurator(binding);
+        }
+        
+        public BindingConfigurator AddSingleton(Type interfaceType, Type instanceType)
+        {
+            var binding = new BindingInfo(instanceType)
+            {
+                AssociatedInterfaces = { interfaceType },
+                AlwaysNewInstance = false
+            };
+            
+            _bindings.Add(binding);
+            
+            return new BindingConfigurator(binding);
+        }
+        
+        public BindingConfigurator AddTransient(Type interfaceType, Type instanceType)
+        {
+            var binding = new BindingInfo(instanceType)
+            {
+                AssociatedInterfaces = { interfaceType },
+                AlwaysNewInstance = true
+            };
+            
+            _bindings.Add(binding);
+            
+            return new BindingConfigurator(binding);
+        }
+        
+        public BindingConfigurator AddSingleton(Type instanceType)
+        {
+            var binding = new BindingInfo(instanceType)
+            {
+                AssociatedInterfaces = { instanceType },
+                AlwaysNewInstance = false
+            };
+            
+            _bindings.Add(binding);
+            
+            return new BindingConfigurator(binding);
+        }
+        
+        public BindingConfigurator AddTransient(Type instanceType)
+        {
+            var binding = new BindingInfo(instanceType)
+            {
+                AssociatedInterfaces = { instanceType },
+                AlwaysNewInstance = true
+            };
+            
+            _bindings.Add(binding);
+            
+            return new BindingConfigurator(binding);
         }
         
         internal IEnumerable<BindingInfo> GetBindings() => _bindings.AsReadOnly();
