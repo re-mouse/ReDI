@@ -12,10 +12,12 @@ namespace ReDI
         private readonly Dictionary<Type, HashSet<ServiceRegistration>> _registrationsByInterface = new Dictionary<Type, HashSet<ServiceRegistration>>();
         
         private bool _isDisposed;
+        private Container _parent;
         private HashSet<Type> _constructingTypes = new HashSet<Type>();
         
-        internal Container(IEnumerable<BindingInfo> bindings)
+        internal Container(IEnumerable<BindingInfo> bindings, Container parent)
         {
+            _parent = parent;
             var toBuild = new HashSet<ServiceRegistration>();
             
             foreach (var binding in bindings)
@@ -67,7 +69,7 @@ namespace ReDI
         public T? Resolve<T>() where T : class
         {
             var obj = Resolve(typeof(T));
-            return obj != null ? (T)obj : null;
+            return obj != null ? (T)obj : _parent?.Resolve<T>();
         }
         
         public object? Resolve(Type type)
@@ -76,15 +78,15 @@ namespace ReDI
 
             if (IsGenericList(type))
             {
-                return ResolveList(type);
+                return ResolveList(type) ?? _parent?.ResolveList(type);
             }
             else if (IsGeneric(type))
             {
-                return ResolveGeneric(type);
+                return ResolveGeneric(type) ?? _parent?.ResolveGeneric(type);
             }
             else
             {
-                return ResolveSingle(type);
+                return ResolveSingle(type) ?? _parent?.ResolveSingle(type);
             }
         }
         

@@ -14,7 +14,7 @@ namespace ReDI
             _moduleManager.RegisterModule(module);
         }
 
-        public Container Build()
+        public Container Build(Container parentContainer = null)
         {
             var typeManager = new TypeManager();
             var modules = _moduleManager.GetRegisteredModules();
@@ -25,7 +25,7 @@ namespace ReDI
             }
 
             var bindings = typeManager.GetBindings();
-            return new Container(bindings);
+            return new Container(bindings, parentContainer);
         }
     }
 }
