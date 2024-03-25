@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace ReDI
 {
@@ -16,7 +13,6 @@ namespace ReDI
         public bool IsDisposable { get; }
         public bool IsGeneric { get; }
         
-        private Dictionary<Type, object> GenericInstances { get; } = new Dictionary<Type, object>();
         private Dictionary<Type, ConstructorDelegate> GenericConstructorsByType { get; } = new Dictionary<Type, ConstructorDelegate>();
         private Dictionary<Type, InjectDelegate> GenericInjectsByType { get; } = new Dictionary<Type, InjectDelegate>();
 
@@ -62,8 +58,10 @@ namespace ReDI
         private object CreateForGeneric(Container container, Type concreteType)
         {
             if (concreteType == null)
+            {
                 return null;
-
+            }
+            
             ConstructorDelegate constructor;
             if (GenericConstructorsByType.ContainsKey(concreteType))
             {
@@ -77,19 +75,11 @@ namespace ReDI
             
             var concreteObj = constructor(container);
                 
-            if (!AlwaysNewInstance)
-            {
-                GenericInstances[concreteType] = concreteObj;
-            }
-                
             return concreteObj;
         }
 
         public object Inject(object obj, Container container, Type concreteType)
         {
-            if (concreteType == null)
-                return null;
-            
             if (IsGeneric)
             {
                 InjectForGeneric(obj, container, concreteType);
@@ -105,6 +95,11 @@ namespace ReDI
 
         private void InjectForGeneric(object obj, Container container, Type concreteType)
         {
+            if (concreteType == null)
+            {
+                return;
+            }
+            
             InjectDelegate inject;
             if (GenericInjectsByType.ContainsKey(concreteType))
             {

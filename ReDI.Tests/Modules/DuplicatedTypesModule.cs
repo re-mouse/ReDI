@@ -1,5 +1,3 @@
-using ReDI;
-
 namespace ReDI.Tests
 {
     public class DuplicatedTypesModule : Module
