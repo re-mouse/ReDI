@@ -1,12 +1,9 @@
 # ReDI: Reusable Dependency Injection
 ## Purpose
-1. The ReDI framework aims to simplify dependency management within your projects. By encapsulating dependencies in modules, it allows you to create reusable libraries and easily set up test environments. With just a few lines of code, you can manage complex dependency graphs.
-2. Make developing multiplayer games more simple, by using same shared libraries beetwen Server and Unity
-## Future
-Codebase contain only ~500 lines, so i will try not to increase it, and my goal is to keep that minimal API, but maybe add some binding features, like factories
+The ReDI framework aims to simplify dependency management within your projects. By encapsulating dependencies in modules, it allows you to create reusable libraries and easily set up test environments.
 
 ## Compatability
-It works well with unity, as it targets at .net standard 2.1, and with any .net application above .net 5
+It targets the .net 2.1 standard and can be used in both .NET and Unity.
 
 ## Install
 Add the ReDI package to your project using NuGet:
