@@ -9,8 +9,8 @@ namespace ReDI
         private class ModuleBinding
         {
             public Type Type { get; }
-            public Module? instance;
-            public Module? defaultInstance;
+            public IModule? instance;
+            public IModule? defaultInstance;
 
             public ModuleBinding(Type type)
             {
@@ -20,7 +20,7 @@ namespace ReDI
         
         private readonly Dictionary<Type, ModuleBinding> _modules = new Dictionary<Type, ModuleBinding>();
 
-        public void RegisterModule<TModule>() where TModule : Module, new()
+        public void RegisterModule<TModule>() where TModule : IModule, new()
         {
             var moduleType = typeof(TModule);
             if (!_modules.ContainsKey(moduleType))
@@ -33,7 +33,7 @@ namespace ReDI
             }
         }
         
-        public void RegisterModule<TModule>(TModule module) where TModule : Module
+        public void RegisterModule<TModule>(TModule module) where TModule : IModule
         {
             var moduleType = typeof(TModule);
             
@@ -56,7 +56,7 @@ namespace ReDI
             }
         }
 
-        internal IEnumerable<Module> GetRegisteredModules() => 
+        internal IEnumerable<IModule> GetRegisteredModules() => 
             _modules.Values.Select(bind => bind.instance ?? bind.defaultInstance ?? throw new ModuleNotAssignedException(bind.Type));
     }
 }

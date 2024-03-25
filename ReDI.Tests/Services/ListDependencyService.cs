@@ -12,16 +12,16 @@ namespace ReDI.Tests
     }
     }
 
-    public class TwoServicesDependencyModule : Module
+    public class TwoServicesDependencyModule : IModule
     {
-        public override void BindDependencies(TypeManager typeBinder)
+        public void BindDependencies(TypeManager typeBinder)
     {
         typeBinder.AddSingleton<ITwoServicesDependency, ServiceAa>();
         typeBinder.AddSingleton<ITwoServicesDependency, ServiceBb>();
         typeBinder.AddSingleton<ListDependencyService>();
     }
 
-        public override void BindModuleDependencies(ModuleManager moduleBinder)
+        public void BindModuleDependencies(ModuleManager moduleBinder)
     {
         
     }

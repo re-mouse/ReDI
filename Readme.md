@@ -8,85 +8,122 @@ Codebase contain only ~500 lines, so i will try not to increase it, and my goal 
 ## Compatability
 It works well with unity, as it targets at .net standard 2.1, and with any .net application above .net 5
 
-## Quickstart
-### Install
-#### Install ReDI via NuGet:
+## Install
 Add the ReDI package to your project using NuGet:
 ```
 Install-Package ReDI
 ```
 
-### Create Modules:
-Define your modules by creating classes that inherit from Module. A common naming convention is {LibraryName}Module. 
-In each module, specify the types and their dependencies using the same syntax as Microsoft’s Dependency Injection (DI) framework.
+## Basic Usage
 
-## Example Usage
-Suppose we have the following scenario:
-
-Modules:
-FooBarModule: Contains types related to Foo and Bar.
-ZuBarModule: Contains types related to Zu and Bar.
-Dependencies:
-Bar depends on IFoo.
-ZuBarModule depends on FooBarModule.
-Here’s how you can set it up:
-
+Let's define Foo class, that use IGreeter to print greeting, and concrete greeter.
 ```cs
-using ReDI;
-
-class Program
+public class Foo 
 {
-    static void Main()
-    {
-        var containerBuilder = new ContainerBuilder();
-        containerBuilder.AddModule<ZuBarModule>(); // Register ZuBarModule
-        var container = containerBuilder.Build();
+    private readonly IGreeter _greeter;
 
-        var zu = container.Resolve<Zu>();
-        var bar = container.Resolve<Bar>();
-        // Check if IFoo is injected into Bar and zu is resolved
-        Console.WriteLine(zu != null); 
-        Console.WriteLine(bar.foo != null); 
+    public Foo(IGreeter greeter) { _greeter = greeter; }
+    
+    public void PrintGreeting()
+    {
+        Console.WriteLine(_greeter.GetGreeting());
     }
 }
 
-public interface IFoo { }
-public class Foo : IFoo { }
-public class Zu { }
-
-public class Bar
+public interface IGreeter
 {
-    [Inject] public IFoo foo; // Inject IFoo dependency
+    public string GetGreeting();
 }
 
-public class FooBarModule : Module
+public class HelloWorldGreeter : IGreeter
 {
-    public override void BindDependencies(TypeManager typeBinder)
-    {
-        var bar = new Bar();
-        typeBinder.AddSingleton<IFoo, Foo>().AsDisposable();
-        typeBinder.AddTransient<Bar>().ImplementingInterfaces().FromInstance(bar);
-    }
-
-    public override void BindModuleDependencies(ModuleManager moduleBinder)
-    {
-        // No additional module dependencies for FooBarModule
-    }
+    public string GetGreeting() => "Hello World";
 }
-
-public class ZuBarModule : Module
+```
+Now our goal is to make them work together, so let's define module where we will pack them
+```cs
+public class FooModule : IModule
 {
-    public override void BindDependencies(TypeManager typeBinder)
+    public void BindDependencies(TypeManager typeBinder)
     {
-        typeBinder.AddSingleton<Zu>(); // Register Zu type
+        typeBinder.AddSingleton<Foo>();
+        typeBinder.AddSingleton<IGreeter, HelloWorldGreeter>();
     }
 
-    public override void BindModuleDependencies(ModuleManager moduleBinder)
+    public void BindModuleDependencies(ModuleManager moduleBinder)
     {
-        moduleBinder.RegisterModule<FooBarModule>(); // Register FooBarModule dependency
     }
 }
 ```
+Great, now we know basics, we can create some module that we will reuse.
+
+Let's define weather module, that provides weather service and use it later
+```cs
+
+public class WeatherModule : IModule
+{
+    public void BindDependencies(TypeManager typeBinder)
+    {
+        typeBinder.AddTransient<WeatherService>();
+    }
+
+    public void BindModuleDependencies(ModuleManager moduleBinder)
+    {
+    }
+}
+
+public class WeatherService
+{
+    public int GetWeatherTemperature() => 100; //it's hot
+}
+```
+
+Now let's define class that use that service, and want to inject it.
+
+Injecting attribute can be applied to properties, fields and methods. 
+Calling order: Fields -> Properties -> Methods
+```cs
+public class Bar
+{
+    [Inject] private WeatherService _weatherService;
+
+    public void PrintWeather()
+    {
+        Console.WriteLine($"Temperature is {_weatherService.GetWeatherTemperature()}");
+    }
+}
+
+public class BarModule : IModule
+{
+    public void BindDependencies(TypeManager typeBinder)
+    {
+        var bar = new Bar();
+        typeBinder.AddTransient<Bar>().ImplementingInterfaces().FromInstance(bar);
+    }
+
+    public void BindModuleDependencies(ModuleManager moduleBinder)
+    {
+        moduleBinder.RegisterModule<WeatherModule>();
+    }
+}
+
+```
+
+Now let's use everything in our program
+```cs
+var containerBuilder = new ContainerBuilder();
+containerBuilder.AddModule<FooModule>();
+containerBuilder.AddModule<BarModule>();
+var container = containerBuilder.Build();
+
+var foo = container.Resolve<Foo>();
+var bar = container.Resolve<Bar>();
+
+foo.PrintGreeting();
+bar.PrintWeather();
+```
+
+Encapsulating dependencies making testing is much easier, and it allows you to write reusable libraries.
 
 ## Contributing
 Feel free to contribute to the ReDI framework by submitting pull requests or reporting issues on the GitHub repository.

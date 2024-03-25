@@ -19,28 +19,28 @@ namespace ReDI.Tests
         {
             [Inject] public IFoo foo;
         }
-        public class FooBarModule : Module
+        public class FooBarModule : IModule
         {
-            public override void BindDependencies(TypeManager typeBinder)
+            public void BindDependencies(TypeManager typeBinder)
             {
                 var bar = new Bar();
                 typeBinder.AddSingleton<IFoo, Foo>().AsDisposable();
                 typeBinder.AddTransient<Bar>().ImplementingInterfaces().FromInstance(bar);
             }
 
-            public override void BindModuleDependencies(ModuleManager moduleBinder)
+            public void BindModuleDependencies(ModuleManager moduleBinder)
             {
             }
         }
 
-        public class ZuBarModule : Module
+        public class ZuBarModule : IModule
         {
-            public override void BindDependencies(TypeManager typeBinder)
+            public void BindDependencies(TypeManager typeBinder)
             {
                 typeBinder.AddSingleton<Zu>();
             }
 
-            public override void BindModuleDependencies(ModuleManager moduleBinder)
+            public void BindModuleDependencies(ModuleManager moduleBinder)
             {
                 moduleBinder.RegisterModule<FooBarModule>();
             }

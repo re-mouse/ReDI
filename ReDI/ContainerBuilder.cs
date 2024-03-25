@@ -4,12 +4,12 @@ namespace ReDI
     {
         private readonly ModuleManager _moduleManager = new ModuleManager();
 
-        public void AddModule<TModule>() where TModule : Module, new()
+        public void AddModule<TModule>() where TModule : IModule, new()
         {
             _moduleManager.RegisterModule<TModule>();
         }
         
-        public void AddModule<TModule>(TModule module) where TModule : Module
+        public void AddModule<TModule>(TModule module) where TModule : IModule
         {
             _moduleManager.RegisterModule(module);
         }

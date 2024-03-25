@@ -1,8 +1,8 @@
 namespace ReDI.Tests
 {
-    public class ClassInjectionModule : Module
+    public class ClassInjectionModule : IModule
     {
-        public override void BindDependencies(TypeManager typeBinder)
+        public void BindDependencies(TypeManager typeBinder)
         {
             typeBinder.AddSingleton<ServiceWithInjectProperties>().ImplementingInterfaces();
             typeBinder.AddSingleton<ServiceWithInjectMethods>().ImplementingInterfaces();
@@ -10,7 +10,7 @@ namespace ReDI.Tests
             typeBinder.AddSingleton<ServiceWithInjectFields>().ImplementingInterfaces();
         }
 
-        public override void BindModuleDependencies(ModuleManager moduleBinder)
+        public void BindModuleDependencies(ModuleManager moduleBinder)
         {
             
         }

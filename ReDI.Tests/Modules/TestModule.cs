@@ -1,13 +1,13 @@
 namespace ReDI.Tests
 {
-    public class TestModule : Module
+    public class TestModule : IModule
     {
-        public override void BindDependencies(TypeManager typeBinder)
+        public void BindDependencies(TypeManager typeBinder)
         {
             typeBinder.AddSingleton<IService, Service>().AsDisposable();
         }
 
-        public override void BindModuleDependencies(ModuleManager moduleBinder)
+        public void BindModuleDependencies(ModuleManager moduleBinder)
         {
         }
     }

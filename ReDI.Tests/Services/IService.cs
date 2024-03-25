@@ -1,4 +1,6 @@
 namespace ReDI.Tests
 {
-    public interface IService {}
+    public interface IService
+    {
+    }
 }

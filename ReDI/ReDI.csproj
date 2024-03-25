@@ -7,7 +7,7 @@
         <PackageProjectUrl>https://github.com/re-mouse/ReDI</PackageProjectUrl>
         <RepositoryUrl>https://github.com/re-mouse/ReDI.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <Version>1.1.0</Version>
+        <Version>1.1.1</Version>
         <PackageIconUrl>https://raw.githubusercontent.com/re-mouse/.blobs/0e42219d73f3d024a11d6475797543cad7c00db7/ReDI_icon.png</PackageIconUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Description>Extreme perfomance Dependency Injection Framework, that target for reusable libraries and can manage comlpex dependency graphs</Description>

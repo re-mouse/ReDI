@@ -1,13 +1,12 @@
 namespace ReDI.Tests
 {
-    public class DuplicatedModuleDependenciesModule : Module
+    public class DuplicatedModuleDependenciesModule : IModule
     {
-        public override void BindDependencies(TypeManager typeBinder)
+        public void BindDependencies(TypeManager typeBinder)
         {
-                
         }
 
-        public override void BindModuleDependencies(ModuleManager moduleBinder)
+        public void BindModuleDependencies(ModuleManager moduleBinder)
         {
             moduleBinder.RegisterModule<TestModule>();
             moduleBinder.RegisterModule<TestModule>();

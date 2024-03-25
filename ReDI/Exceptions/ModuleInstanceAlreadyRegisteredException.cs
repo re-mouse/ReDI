@@ -4,9 +4,9 @@ namespace ReDI
 {
     public class ModuleInstanceAlreadyRegisteredException : Exception
     {
-        private readonly Module _module;
+        private readonly IModule _module;
 
-        public ModuleInstanceAlreadyRegisteredException(Module module)
+        public ModuleInstanceAlreadyRegisteredException(IModule module)
         {
             _module = module;
         }

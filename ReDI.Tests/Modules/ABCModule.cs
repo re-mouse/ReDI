@@ -1,8 +1,8 @@
 namespace ReDI.Tests
 {
-    public class ABCModule : Module
+    public class ABCModule : IModule
     {
-        public override void BindDependencies(TypeManager typeBinder)
+        public void BindDependencies(TypeManager typeBinder)
         {
             typeBinder.AddSingleton<ServiceA>();
             typeBinder.AddSingleton<ServiceB>();
@@ -10,7 +10,7 @@ namespace ReDI.Tests
             typeBinder.AddTransient<ServiceABC>();
         }
 
-        public override void BindModuleDependencies(ModuleManager moduleBinder)
+        public void BindModuleDependencies(ModuleManager moduleBinder)
         {
         
         }

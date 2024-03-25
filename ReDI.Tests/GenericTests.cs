@@ -70,16 +70,16 @@ public class TestGenericDependency<T>
     }
 }
 
-public class TestGenericModule : Module
+public class TestGenericModule : IModule
 {
-    public override void BindDependencies(TypeManager typeBinder)
+    public void BindDependencies(TypeManager typeBinder)
     {
         typeBinder.AddSingleton(typeof(TestGenericDependency<>));
         typeBinder.AddSingleton(typeof(TestGeneric<>));
         typeBinder.AddSingleton(typeof(TestGenericMethodInjection<>));
     }
 
-    public override void BindModuleDependencies(ModuleManager moduleBinder)
+    public void BindModuleDependencies(ModuleManager moduleBinder)
     {
         moduleBinder.RegisterModule<ABCModule>();
     }
