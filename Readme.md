@@ -1,5 +1,5 @@
 # ReDI: Reusable Dependency Injection
-![alt text](https://raw.githubusercontent.com/re-mouse/.blobs/0e42219d73f3d024a11d6475797543cad7c00db7/ReDI_icon.png)
+![alt text](https://raw.githubusercontent.com/re-mouse/.blobs/master/ReDI_icon_wide.png)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 [![NuGet stable version](https://badgen.net/nuget/v/ReDI)](https://www.nuget.org/packages/ReDI)
 
