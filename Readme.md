@@ -1,4 +1,8 @@
 # ReDI: Reusable Dependency Injection
+![alt text](https://raw.githubusercontent.com/re-mouse/.blobs/0e42219d73f3d024a11d6475797543cad7c00db7/ReDI_icon.png)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![NuGet stable version](https://badgen.net/nuget/v/ReDI)](https://www.nuget.org/packages/ReDI)
+
 ## Purpose
 The ReDI framework aims to simplify dependency management within your projects. By encapsulating dependencies in modules, it allows you to create reusable libraries and easily set up test environments.
 
