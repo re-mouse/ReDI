@@ -32,10 +32,13 @@ namespace ReDI
                 IsGeneric = true;
                 return;
             }
-            
-            _constructor = ServiceReflectionHelper.GetConstructorDelegate(ServiceType);
-            _inject = ServiceReflectionHelper.GetInjectingFieldsAndPropertiesDelegate(ServiceType);
-            _inject += ServiceReflectionHelper.GetInjectingMethodsDelegate(ServiceType);
+
+            if (Instance == default || AlwaysNewInstance)
+            {
+                _constructor = ServiceReflectionHelper.GetConstructorDelegate(ServiceType);
+                _inject = ServiceReflectionHelper.GetInjectingFieldsAndPropertiesDelegate(ServiceType);
+                _inject += ServiceReflectionHelper.GetInjectingMethodsDelegate(ServiceType);
+            }
         }
 
         public object Create(Container container, Type concreteType)
